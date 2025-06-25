@@ -1,0 +1,10 @@
+python-telegram-bot
+openai
+selenium
+webdriver-manager
+beautifulsoup4
+pandas
+openpyxl
+requests
+python-dotenv
+playwright
