@@ -46,7 +46,7 @@ scraping_lock = threading.Lock()
 
 # --- Constantes e dados ---
 ZONAS_RJ = {
-    "Zona Central": ["Catumbi", "Cidade Nova", "Estácio", "Gamboa", "Lapa", "Mangueira", "Paquetá", "Rio Comprido", "Santa Teresa", "Santo Cristo", "Saúde", "Vasco da Gama"],
+    "Zona Central": ["Centro", "Catumbi", "Cidade Nova", "Estácio", "Gamboa", "Lapa", "Mangueira", "Paquetá", "Rio Comprido", "Santa Teresa", "Santo Cristo", "Saúde", "Vasco da Gama"],
     "Zona Sul": ["Botafogo", "Glória", "Catete", "Copacabana", "Cosme Velho", "Flamengo", "Gávea", "Humaitá", "Ipanema", "Jardim Botânico", "Lagoa", "Laranjeiras", "Leblon", "Leme", "Rocinha", "São Conrado", "Urca", "Vidigal"],
     "Zona Oeste": ["Anil", "Barra da Tijuca", "Barra de Guaratiba", "Camorim", "Cidade de Deus", "Curicica", "Freguesia (Jacarepaguá)", "Gardênia Azul", "Grumari", "Itanhangá", "Jacarepaguá", "Joá", "Praça Seca", "Pechincha", "Recreio dos Bandeirantes", "Tanque", "Taquara", "Vargem Grande", "Vargem Pequena", "Vila Valqueire", "Bangu", "Deodoro", "Gericinó", "Jardim Sulacap", "Magalhães Bastos", "Padre Miguel", "Realengo", "Santíssimo", "Senador Camará", "Vila Militar", "Campo Grande", "Cosmos", "Guaratiba", "Inhoaíba", "Paciência", "Pedra de Guaratiba", "Santa Cruz", "Senador Vasconcelos", "Sepetiba"],
     "Zona Norte": ["São Cristóvão", "Benfica", "Alto da Boa Vista", "Andaraí", "Abolição", "Água Santa", "Cachambi", "Caju", "Del Castilho", "Encantado", "Engenho de Dentro", "Engenho Novo", "Grajaú", "Higienópolis", "Jacaré", "Jacarezinho", "Lins de Vasconcelos", "Manguinhos", "Maria da Graça", "Maracanã", "Méier", "Piedade", "Pilares", "Praça da Bandeira", "Riachuelo", "Rocha", "Sampaio", "São Francisco Xavier", "Tijuca", "Vila Isabel", "Bancários", "Bonsucesso", "Cacuia", "Cocotá", "Freguesia (Ilha do Governador)", "Galeão", "Jardim Carioca", "Jardim Guanabara", "Maré", "Moneró", "Olaria", "Pitangueiras", "Portuguesa", "Praia da Bandeira", "Ramos", "Ribeira", "Tauá", "Zumbi", "Acari", "Anchieta", "Barros Filho", "Bento Ribeiro", "Brás de Pina", "Campinho", "Cavalcanti", "Cascadura", "Coelho Neto", "Colégio", "Cordovil", "Costa Barros", "Engenheiro Leal", "Engenho da Rainha", "Guadalupe", "Honório Gurgel", "Inhaúma", "Irajá", "Jardim América", "Madureira", "Marechal Hermes", "Oswaldo Cruz", "Parada de Lucas", "Parque Anchieta", "Parque Colúmbia", "Pavuna", "Penha", "Penha Circular", "Quintino Bocaiuva", "Ricardo de Albuquerque", "Rocha Miranda", "Tomás Coelho", "Turiaçu", "Vaz Lobo", "Vicente de Carvalho", "Vigário Geral", "Vila da Penha", "Vila Kosmos", "Vista Alegre"]
@@ -66,11 +66,27 @@ except Exception as e:
     logger.error(f"❌ Error loading cidades_rj_validadas.txt: {str(e)}")
     CIDADES_RJ = []
 
-TIPOS_IMOVEL = ["Apartamento", "Casa", "Terreno", "Prédio Comercial", "Prédio Residencial"]
+TIPOS_IMOVEL = [
+    "Apartamento", 
+    "Casa", 
+    "Casa de Condomínio",
+    "Cobertura Residencial",
+    "Kitnet Residencial",
+    "Flat Residencial",
+    "Terreno",
+    "Prédio Residencial",
+    "Prédio Comercial",
+    "Sala Comercial",
+    "Galpões Comerciais", 
+    "Pontos Comerciais",
+    "Consultórios Comerciais",
+    "Imóveis Comerciais",
+    "Fazendas / Sitios"
+]
 MODALIDADES = ["Aluguel", "Venda"]
 
 # --- Estados da conversa ---
-(ESCOLHA_LOCAL, ESCOLHA_ZONA, ESCOLHA_BAIRRO, ESCOLHA_CIDADE, ESCOLHA_TIPO, ESCOLHA_MODALIDADE, ESCOLHA_REFINAMENTO, ESCOLHA_PAGINAS, CONFIRMA_BUSCA, AGUARDA_SCRAPING) = range(10)
+(ESCOLHA_LOCAL, ESCOLHA_ZONA, ESCOLHA_BAIRRO, ESCOLHA_CIDADE, ESCOLHA_ZONA_COMPLETA, ESCOLHA_TIPO, ESCOLHA_MODALIDADE, ESCOLHA_REFINAMENTO, ESCOLHA_PAGINAS, CONFIRMA_BUSCA, AGUARDA_SCRAPING) = range(11)
 
 # --- Função utilitária para GPT-4o mini ---
 def gpt4o_ask(prompt, system=None):
@@ -123,11 +139,19 @@ def build_vivareal_url(context):
     tipo_slug_map = {
         'apartamento': 'apartamento_residencial',
         'casa': 'casa_residencial',
+        'casa de condomínio': "condominio_residencial",
+        'cobertura residencial': "cobertura_residencial",
+        'kitnet residencial': "kitnet_residencial",
+        'flat residencial': "flat_residencial",
         'terreno': 'lote-terreno_residencial',
-        'prédio comercial': 'predio_comercial',
         'prédio residencial': 'edificio-residencial_comercial',
-        'predio comercial': 'predio_comercial',
-        'predio residencial': 'edificio-residencial_comercial',
+        'prédio comercial': 'predio_comercial',
+        'sala comercial': 'sala_comercial',
+        'galpões comerciais': "galpao_comercial",
+        'pontos comerciais': "ponto-comercial_comercial",
+        'consultórios comerciais': "consultorio_comercial",
+        'imóveis comerciais': "imovel-comercial_comercial",
+        'fazendas / sitios': 'granja_comercial'
     }
     tipo_slug = tipo_slug_map.get(tipo, tipo)
 
@@ -160,6 +184,10 @@ def build_vivareal_url(context):
             url = f"{base_url}/{trans_slug}/rj/rio-de-janeiro/{zona_slug}/{tipo_slug}/"
         else:
             url = f"{base_url}/{trans_slug}/rj/rio-de-janeiro/{zona_slug}/"
+    elif local == 'zona_completa':
+        # Zona completa (nova funcionalidade): /venda/rj/rio-de-janeiro/zona-sul/casa_residencial/
+        zona_slug = zona_slug_map.get(zona, normalize_str(zona))
+        url = f"{base_url}/{trans_slug}/rj/rio-de-janeiro/{zona_slug}/{tipo_slug}/"
     elif local == 'bairro':
         # Bairro específico: /venda/rj/rio-de-janeiro/zona-sul/gloria/casa_residencial/
         zona_slug = zona_slug_map.get(zona, normalize_str(zona))
@@ -859,16 +887,15 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         context.user_data.clear()
     
     welcome_message = (
-        "🏠 **Bem-vindo ao ImobBot!** 🏠\n\n"
+        " 🤖 Bem-vindo ao ImobBot!\n\n"
         "Vou te ajudar a encontrar imóveis no Rio de Janeiro através do Viva Real.\n\n"
-        "**Comandos disponíveis:**\n"
-        "• `/x` - Cancela qualquer operação em andamento\n"
-        "• `/r` - Cancela e reinicia uma nova busca\n\n"
+        "• Use /start - Cancela e reinicia uma nova busca\n\n"
         "Vamos começar! Onde você quer buscar imóveis?\n\n"
-        "1️⃣ **Todo o estado do RJ** - Busca em todo o Rio de Janeiro\n"
-        "2️⃣ **Zonas do Rio** - Centro, Sul, Norte, Oeste\n"
-        "3️⃣ **Cidades do interior** - Outras cidades do RJ\n\n"
-        "*Responda apenas o número da opção (1, 2 ou 3).*"
+        "1️⃣ Todo o estado do RJ - Busca em todo o Rio de Janeiro\n"
+        "2️⃣ Bairros do Rio - Centro, Sul, Norte, Oeste \n"
+        "3️⃣ Cidades do interior - Outras cidades do RJ\n"
+        "4️⃣ Zonas do RJ Completas - Zonas inteiras sem bairros específicos\n\n"
+        "Responda apenas o número da opção (1, 2, 3 ou 4)."
     )
     await update.message.reply_text(welcome_message)
     logger.info(f"📤 Sent to user {user_id}: {welcome_message[:100]}...")
@@ -931,8 +958,21 @@ async def escolha_local(update: Update, context: ContextTypes.DEFAULT_TYPE):
         logger.info(f"📤 Sent complete city list to user {user_id}")
         context.user_data['cidades'] = CIDADES_RJ  # Salvar lista completa
         return ESCOLHA_CIDADE
+    elif txt == '4':
+        context.user_data['local'] = 'zona_completa'
+        zonas_completas = ['Zona Sul', 'Zona Norte', 'Zona Oeste', 'Zona Central']
+        zonas_str = '\n'.join(f"{i+1}. {z}" for i, z in enumerate(zonas_completas))
+        pergunta = (
+            f"🎯 Qual zona completa do Rio de Janeiro você deseja buscar?\n\n"
+            f"{zonas_str}\n\n"
+            f"*Responda apenas o número da zona desejada.*"
+        )
+        await update.message.reply_text(pergunta)
+        logger.info(f"📤 Sent complete zone options to user {user_id}")
+        context.user_data['zonas_completas'] = zonas_completas
+        return ESCOLHA_ZONA_COMPLETA
     else:
-        await update.message.reply_text("Por favor, responda 1, 2 ou 3.")
+        await update.message.reply_text("Por favor, responda 1, 2, 3 ou 4.")
         logger.info(f"❌ User {user_id} gave invalid choice: {txt}")
         return ESCOLHA_LOCAL
 
@@ -1056,6 +1096,34 @@ async def escolha_cidade(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         await update.message.reply_text(f"✅ Cidade selecionada: **{cidade}**")
         return await pergunta_tipo(update, context)
+
+async def escolha_zona_completa(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not update.message or not isinstance(update.message.text, str) or not update.message.text:
+        return ConversationHandler.END
+    if not isinstance(context.user_data, dict):
+        return ConversationHandler.END
+    
+    user_id = update.effective_user.id
+    user_choice = update.message.text.strip()
+    logger.info(f"👤 User {user_id} chose complete zone: {user_choice}")
+    
+    try:
+        zonas_completas = context.user_data.get('zonas_completas', [])
+        if not isinstance(zonas_completas, list):
+            return ConversationHandler.END
+        idx = int(user_choice) - 1
+        if idx < 0 or idx >= len(zonas_completas):
+            raise Exception
+        zona_completa = zonas_completas[idx]
+        context.user_data['zona'] = zona_completa
+        logger.info(f"📍 User {user_id} selected complete zone: {zona_completa}")
+        
+        await update.message.reply_text(f"✅ Zona selecionada: **{zona_completa}** (busca completa)")
+        return await pergunta_tipo(update, context)
+    except:
+        await update.message.reply_text("Escolha inválida. Responda o número da zona desejada.")
+        logger.info(f"❌ User {user_id} gave invalid zone choice: {user_choice}")
+        return ESCOLHA_ZONA_COMPLETA
 
 async def pergunta_tipo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message or not isinstance(update.message.text, str):
@@ -1218,6 +1286,8 @@ async def escolha_paginas(update: Update, context: ContextTypes.DEFAULT_TYPE):
         resumo += f"• Local: Todo o estado do RJ\n"
     elif local == 'zona':
         resumo += f"• Zona: {user_data.get('zona', 'N/A')}\n"
+    elif local == 'zona_completa':
+        resumo += f"• Zona Completa: {user_data.get('zona', 'N/A')}\n"
     elif local == 'bairro':
         resumo += f"• Bairro: {user_data.get('bairro', 'N/A')} ({user_data.get('zona', 'N/A')})\n"
     elif local == 'cidade':
@@ -1364,6 +1434,11 @@ def run_scraping_and_send(update, context, loop):
             # Bairro já vem preenchido do scraping
             df['Município'] = 'Rio de Janeiro'
             df['Estado'] = 'RJ'
+        elif local_tipo == 'zona_completa':
+            # Se foi por zona completa, manter o bairro extraído do endereço
+            # Bairro já vem preenchido do scraping
+            df['Município'] = 'Rio de Janeiro'
+            df['Estado'] = 'RJ'
         elif local_tipo == 'cidade':
             # Se foi por cidade do interior
             cidade_busca = user_data.get('cidade', 'N/A')
@@ -1412,6 +1487,27 @@ def run_scraping_and_send(update, context, loop):
             )
             return
         
+        # Função para gerar descrição específica do local
+        def get_local_description(user_data):
+            local = user_data.get('local', 'N/A')
+            if local == 'todo_estado':
+                return "Todo o estado do RJ"
+            elif local == 'zona':
+                zona = user_data.get('zona', 'N/A')
+                return f"{zona} (com bairros)"
+            elif local == 'zona_completa':
+                zona = user_data.get('zona', 'N/A')
+                return f"{zona} (completa)"
+            elif local == 'bairro':
+                bairro = user_data.get('bairro', 'N/A')
+                zona = user_data.get('zona', 'N/A')
+                return f"Bairro {bairro}, {zona}"
+            elif local == 'cidade':
+                cidade = user_data.get('cidade', 'N/A')
+                return f"Cidade {cidade}"
+            else:
+                return local
+
         # Aguardar 3 segundos antes de enviar o arquivo
         logger.info(f"⏳ Aguardando 3 segundos antes de enviar arquivo para user {user_id}")
         time.sleep(3)
@@ -1436,7 +1532,7 @@ def run_scraping_and_send(update, context, loop):
                 asyncio.run_coroutine_threadsafe(
                     update.message.reply_document(
                         document=input_file,
-                        caption=f"✅ Busca finalizada! {len(enriched_data)} imóveis encontrados.\n\n📊 Dados coletados:\n• Local: {user_data.get('local', 'N/A')}\n• Tipo: {user_data.get('tipo', 'N/A')}\n• Modalidade: {user_data.get('modalidade', 'N/A')}\n• Páginas: {max_pages}\n\nUse /start para nova busca."
+                        caption=f"✅ Busca finalizada! {len(enriched_data)} imóveis encontrados.\n\n📊 Dados coletados:\n• Local: {get_local_description(user_data)}\n• Tipo: {user_data.get('tipo', 'N/A')}\n• Modalidade: {user_data.get('modalidade', 'N/A')}\n• Páginas: {max_pages}\n\nUse /start para nova busca."
                     ),
                     loop
                 )
@@ -1455,7 +1551,7 @@ def run_scraping_and_send(update, context, loop):
                     update.message.reply_document(
                         document=file_path,
                         filename=f"imoveis_rj_{len(enriched_data)}_imoveis.xlsx",
-                        caption=f"✅ Busca finalizada! {len(enriched_data)} imóveis encontrados.\n\n📊 Dados coletados:\n• Local: {user_data.get('local', 'N/A')}\n• Tipo: {user_data.get('tipo', 'N/A')}\n• Modalidade: {user_data.get('modalidade', 'N/A')}\n• Páginas: {max_pages}\n\nUse /start para nova busca."
+                        caption=f"✅ Busca finalizada! {len(enriched_data)} imóveis encontrados.\n\n📊 Dados coletados:\n• Local: {get_local_description(user_data)}\n• Tipo: {user_data.get('tipo', 'N/A')}\n• Modalidade: {user_data.get('modalidade', 'N/A')}\n• Páginas: {max_pages}\n\nUse /start para nova busca."
                     ),
                     loop
                 )
@@ -1470,7 +1566,7 @@ def run_scraping_and_send(update, context, loop):
                     info_message = (
                         f"✅ Busca finalizada! {len(enriched_data)} imóveis encontrados.\n\n"
                         f"📊 Dados coletados:\n"
-                        f"• Local: {user_data.get('local', 'N/A')}\n"
+                        f"• Local: {get_local_description(user_data)}\n"
                         f"• Tipo: {user_data.get('tipo', 'N/A')}\n"
                         f"• Modalidade: {user_data.get('modalidade', 'N/A')}\n"
                         f"• Páginas: {max_pages}\n\n"
@@ -1537,6 +1633,7 @@ def main():
             ESCOLHA_ZONA: [MessageHandler(filters.TEXT & ~filters.COMMAND, escolha_zona)],
             ESCOLHA_BAIRRO: [MessageHandler(filters.TEXT & ~filters.COMMAND, escolha_bairro)],
             ESCOLHA_CIDADE: [MessageHandler(filters.TEXT & ~filters.COMMAND, escolha_cidade)],
+            ESCOLHA_ZONA_COMPLETA: [MessageHandler(filters.TEXT & ~filters.COMMAND, escolha_zona_completa)],
             ESCOLHA_TIPO: [MessageHandler(filters.TEXT & ~filters.COMMAND, escolha_tipo)],
             ESCOLHA_MODALIDADE: [MessageHandler(filters.TEXT & ~filters.COMMAND, escolha_modalidade)],
             ESCOLHA_REFINAMENTO: [MessageHandler(filters.TEXT & ~filters.COMMAND, escolha_refinamento)],
