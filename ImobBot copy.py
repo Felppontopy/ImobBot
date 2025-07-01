@@ -510,7 +510,7 @@ def gpt4o_parse_refinamento(resposta_usuario):
         logger.error(f"❌ Erro ao interpretar refinamento: {str(e)} | Resposta: {resposta}")
     return {}
 
-def enrich_property_details(properties, max_workers=6, user_id=None):
+def enrich_property_details(properties, max_workers=4, user_id=None):
     """
     Após a coleta inicial, extrai dados detalhados de cada anúncio usando multi-threading.
     Adaptado do DONE.py para o contexto do bot Telegram.
@@ -553,9 +553,6 @@ def enrich_property_details(properties, max_workers=6, user_id=None):
     logger.info(f"🔗 Encontrados {len(valid_links)} links válidos para enriquecimento")
     
     # Extrai dados detalhados usando a função multi-threaded
-    # max_workers: 6 threads por padrão (pode ser ajustado conforme capacidade do PC)
-    # - Mais threads = Mais rápido, mas mais uso de CPU/RAM
-    # - Recomendado: 4-8 threads para PCs normais, 8-12 para PCs potentes
     detailed_data = Extract_ad_info(valid_links, max_workers, user_id)
     
     # Adiciona os dados extraídos aos imóveis correspondentes
@@ -594,7 +591,7 @@ def enrich_property_details(properties, max_workers=6, user_id=None):
     logger.info(f"🔎 Enriquecimento concluído para {len(enriched)} imóveis")
     return enriched
 
-def Extract_ad_info(links, max_workers=6, user_id=None):
+def Extract_ad_info(links, max_workers=4, user_id=None):
     """
     Extrai informações detalhadas de múltiplos anúncios usando multi-threading.
     Adaptado do DONE.py para o contexto do bot Telegram com melhor robustez.
@@ -820,8 +817,7 @@ def Extract_ad_info(links, max_workers=6, user_id=None):
             time.sleep(random.uniform(0.2, 0.5))
     
     # Usa ThreadPoolExecutor para processar múltiplos anúncios simultaneamente
-    # Permitir mais threads para melhor performance, mas com limite de segurança
-    max_workers = min(max_workers, total_links, 4)  # Máximo de 12 workers para PCs potentes
+    max_workers = min(max_workers, total_links, 3)  # Limita a 3 workers para evitar sobrecarga
     completed_count = 0
     
     logger.info(f"🔎 Starting enrichment with {max_workers} workers for {total_links} links")
