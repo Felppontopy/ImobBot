@@ -66,6 +66,454 @@ except Exception as e:
     logger.error(f"❌ Error loading cidades_rj_validadas.txt: {str(e)}")
     CIDADES_RJ = []
 
+# Dados das cidades do interior do RJ com seus bairros
+CIDADES_INTERIOR_BAIRROS = {
+    "Angra dos Reis": [
+        "Abraão (Ilha Grande)", "Areal", "Balneário", "Belém", "Bonfim", "Camorim",
+        "Camorim Pequeno", "Centro", "Enseada (Ilha Grande)", "Enseada das Estrelas (Ilha Grande)",
+        "Frade", "Gamboa do Bracuí", "Garatucaia", "Jacuecanga", "Japuíba", "Marinas",
+        "Mombaça", "Monsuaba", "Morro da Carioca", "Morro da Cruz", "Morro do Carmo",
+        "Morro do Peres", "Parque das Palmeiras", "Perequê", "Praia Brava", "Praia do Anil",
+        "Praia Grande", "Retiro", "Ribeira", "Santa Rita do Bracuí", "Santo Antônio",
+        "São Bento", "Sapé", "Sertão do Bracuí", "Vila do Abraão", "Vila Histórica de Mambucaba",
+        "Vila Velha"
+    ],
+    "Aperibé": [
+        "Centro", "Ponte Seca", "Vila Tostes", "Presidente Kenedy", "Nossa Senhora de Fátima",
+        "São João", "Verdes Vales"
+    ],
+    "Araruama": [
+        "Areal", "Bananeiras", "Barbudo", "Boa Perna", "Centro", "Coqueiral",
+        "Engenho Grande", "Fazendinha", "Hawai", "Hospício", "Iguabinha", "Japão",
+        "Jardim Califórnia", "Jardim São Paulo", "Monteiro", "Morro Grande",
+        "Nossa Senhora de Nazareth", "Novo Horizonte", "Outeiro", "Paracatu",
+        "Parque Hotel", "Parati", "Pernambuca", "Ponta do Capim", "Pontinha",
+        "Praia do Hospício", "Praia Seca", "São Vicente de Paulo", "Viaduto", "Vila Capri"
+    ],
+    "Areal": [
+        "Centro", "Distrito de Alberto Torres", "Granja São José", "Vila de Areal"
+    ],
+    "Armação dos Búzios": [
+        "Alto de Búzios", "Armação", "Baía Formosa", "Barra da Lagoa", "Brava", "Canto",
+        "Centro", "Ferradura", "Forno", "Geribá", "João Fernandes", "José Gonçalves",
+        "Manguinhos", "Ossos", "Praia Rasa", "São José", "Tartaruga", "Tucuns"
+    ],
+    "Arraial do Cabo": [
+        "Caiçara", "Caminho do Pontal", "Canaa", "Centro", "Figueira", "Macedônia",
+        "Monte Alto", "Morro da Boa Vista", "Morro da Cabocla", "Parque das Garças",
+        "Pernambuca", "Pontal", "Prainha", "Praia dos Anjos", "Praia Grande", "Sítio",
+        "Taio", "Vila Canaã", "Vila Industrial"
+    ],
+    "Barra do Piraí": [
+        "Asa Branca", "Caixa D'água Velha", "Califórnia da Barra", "Carvão", "Centro",
+        "Chácara Farani", "Coimbra", "Coqueiros", "Distrito de Ipiabas", "Dr. Mesquita",
+        "Grota do Neném", "Horto", "Maracanã", "Matadouro", "Morro do Gama", "Muqueca",
+        "Oficinas Velhas", "Parque Santana", "Roseira", "Santo Antônio", "São João",
+        "São Luís", "Vargem Grande", "Vila Helena", "Vila Suíça"
+    ],
+    "Barra Mansa": [
+        "Ano Bom", "Apiadeiro", "Boa Sorte", "Boa Vista", "Bocaininha", "Centro",
+        "Colônia Santo Antônio", "Estamparia", "Jardim América", "Jardim Boa Vista",
+        "Jardim Central", "Jardim Marilu", "Jardim Primavera", "Light",
+        "Nossa Senhora do Amparo", "Nova Esperança", "Piteiras", "Rialto", "Roselândia",
+        "Santa Clara", "Santa Izabel", "Santa Rosa", "São Francisco de Assis",
+        "São Judas Tadeu", "São Luiz", "São Silvestre", "Saudade", "Siderlândia",
+        "Verbo Divino", "Vila Coringa", "Vila Elmira", "Vila Independência", "Vila Maria",
+        "Vila Nova", "Vila Orlandélia", "Vila Principal", "Vila Ursulino", "Vista Alegre"
+    ],
+    "Belford Roxo": [
+        "Areia Branca", "Barro Vermelho", "Bayer", "Bom Pastor", "Centro", "Coelho da Rocha",
+        "Farrula", "Heliópolis", "Itaipu", "Jardim do Ipê", "Jardim Gláucia", "Lote XV",
+        "Nova Aurora", "Piam", "Redentor", "Santa Amélia", "Santa Maria", "Santa Teresa",
+        "Santo Antônio da Prata", "São Bernardo", "São Francisco de Assis", "São Vicente",
+        "Sargento Roncalli", "Vale do Ipê", "Vila Pauline", "Xavantes"
+    ],
+    "Bom Jardim": [
+        "Alto de Santa Cruz", "Bairro de Fátima", "Centro", "Jardim Ornellas", "Maravilha",
+        "Parque das Águas", "São Miguel", "Varginha", "Vila da Amizade"
+    ],
+    "Bom Jesus do Itabapoana": [
+        "Centro", "Bela Vista", "Pimentel Marques", "Lia Márcia", "Novo", "Monte Calvário",
+        "José Lima", "Parque do Trevo"
+    ],
+    "Cabo Frio": [
+        "Algodoal", "Braga", "Caminho de Búzios", "Centro", "Dunas do Peró", "Foguete",
+        "Gamboa", "Guarani", "Itajuru", "Jardim Caiçara", "Jardim Excelsior",
+        "Jardim Flamboyant", "Jardim Olinda", "Jardim Peró", "Ogiva", "Palmeiras",
+        "Parque Burle", "Passagem", "Peró", "Portinho", "Praia do Siqueira",
+        "Recanto das Dunas", "São Bento", "São Cristóvão", "Unamar", "Vila do Sol", "Vila Nova"
+    ],
+     "Cachoeiras de Macacu": [
+        "Centro", "Japuíba", "Papucaia", "Subaio", "Boca do Mato", "Funchal",
+        "Castália", "Valério"
+    ],
+    "Cambuci": [
+        "Centro", "Floresta", "Cruzeiro", "São João do Paraíso", "Três Irmãos", "Funil",
+        "Monte Verde"
+    ],
+    "Campos dos Goytacazes": [
+        "Centro", "Parque Califórnia", "Parque Tamandaré", "Parque Santo Amaro",
+        "Parque Rosário", "Pelinca", "Parque Leopoldina", "Horto Municipal",
+        "Jardim Carioca", "Parque Turf Club", "Parque Corrientes", "Parque São Caetano",
+        "Parque Tarcísio Miranda", "Goytacazes", "Donana", "Goitacazes", "Farol de São Tomé",
+        "Travessão", "Guarus", "Ururaí", "Dores de Macabu", "Mundo Novo", "Tocos",
+        "Santo Eduardo", "Santa Maria"
+    ],
+    "Cantagalo": [
+        "Centro", "São José", "Parque das Árvores", "Triângulo", "Santo Antônio",
+        "São Pedro", "Boa Sorte"
+    ],
+    "Carapebus": [
+        "Centro", "Sapecado", "Urbis", "Praia de Carapebus", "Capelinha", "Vila Cândida"
+    ],
+    "Cardoso Moreira": [
+        "Centro", "Cachoeiro", "Orminda", "Catarino", "Parque das Acácias",
+        "Nossa Senhora da Penha"
+    ],
+    "Carmo": [
+        "Centro", "Botafogo", "Herdeiros", "Jardim Carmo", "Nossa Senhora da Glória",
+        "Parque Industrial"
+    ],
+    "Casimiro de Abreu": [
+        "Centro", "Barra de São João", "Rio Dourado", "Professor Souza", "Mataruna",
+        "Industrial", "Jardim Miramar"
+    ],
+    "Comendador Levy Gasparian": [
+        "Centro", "Afonso Arinos", "Fonseca Almeida", "Grotão", "Gulf"
+    ],
+    "Conceição de Macabu": [
+        "Centro", "Bocaina", "Vila São José", "Rhódia", "Piteiras", "Calçadinha"
+    ],
+    "Cordeiro": [
+        "Centro", "Retiro Poético", "Dois Valos", "Manancial", "Rodolfo", "São Luiz"
+    ],
+    "Duas Barras": [
+        "Centro", "Jardim do Lago", "Matadouro", "Vargem Grande", "Fazenda do Campo"
+    ],
+    "Duque de Caxias": [
+        "Bar dos Cavalheiros", "Centro", "Centenário", "Chácaras Arcampo", "Doutor Laureano",
+        "Engenho do Porto", "Gramacho", "Jardim Gramacho", "Jardim Leal", "Jardim Olavo Bilac",
+        "Lagunas e Dourados", "Parque Duque", "Parque Fluminense", "Parque Sarapuí",
+        "Periquitos", "Sarapuí", "Vila São Luís", "Vila Sarapuí", "Vinte e Cinco de Agosto",
+        "Campos Elíseos", "Capivari", "Chácaras Rio-Petrópolis", "Cidade dos Meninos",
+        "Figueira", "Imbariê", "Jardim Anhangá", "Jardim Primavera", "Mardi Gras",
+        "Nova Campinas", "Pilar", "Parada Angélica", "Parada Morabi", "Parque Eldorado",
+        "Parque Equitativa", "Santa Cruz da Serra", "Santa Lúcia", "Saracuruna", "Taquara",
+        "Vila Maria Helena", "Vila Santa Cruz", "Xerém"
+    ],
+    "Engenheiro Paulo de Frontin": [
+        "Centro", "Rodolfo de Abreu", "Graminha", "Sacra Família do Tinguá", "Morro Azul"
+    ],
+    "Guapimirim": [
+        "Bananal", "Centro", "Citrolândia", "Corujas", "Gleba de Fora", "Iconha",
+        "Jardim Guapimirim", "Limoeiro", "Monte Olivete", "Orindi", "Parada Ideal",
+        "Parque das Rosas", "Quinta Mariana", "Segredo", "Vale das Pedrinhas", "Vila Olímpia"
+    ],
+    "Iguaba Grande": [
+        "Centro", "Canellas City", "Cidade Nova", "Iguabela", "Jardim Solares",
+        "Lagoa Azul", "Parque Tamariz", "Pedreira"
+    ],
+    "Itaboraí": [
+        "Aldeia da Prata", "Ampliação", "Apolo", "Caluge", "Centro", "Chácaras de Inoã",
+        "Gebara", "Granjas Cabuçu", "Itambi", "Joaquim de Oliveira", "Manilha",
+        "Marambaia", "Nancilândia", "Nova Cidade", "Outeiro das Pedras", "Pachecos",
+        "Porto das Caixas", "Retiro São Joaquim", "Rio Várzea", "Sambaetiba",
+        "Santo Expedito", "São Joaquim", "São José", "Três Pontes", "Venda das Pedras",
+        "Visconde de Itaboraí"
+    ],
+    "Itaguaí": [
+        "Centro", "Vila Margarida", "Engenho", "Parque Brisamar", "Monte Serrat",
+        "Jardim América", "Leandro", "Coroa Grande", "Ilha da Madeira", "Vila Geni",
+        "Chaperó", "Ibirapitanga", "Mazomba", "Piranema"
+    ],
+    "Italva": [
+        "Centro", "Boa Vista", "Parque Industrial", "São Caetano", "Saldanha da Gama"
+    ],
+    "Itaocara": [
+        "Centro", "Cidade Nova", "Jardim da Aldeia", "Bocaina", "Caxias", "Adolvane"
+    ],
+    "Itaperuna": [
+        "Aeroporto", "Bela Vista", "Boa Fortuna", "Carulas", "Centro", "Cidade Nova",
+        "Cehab", "Fiteiro", "Frigorífico", "Glória", "Governo", "Horto Florestal",
+        "Jardim Surubi", "Lions", "Matadouro", "Niterói", "Presidente Costa e Silva",
+        "Presidente Humberto de Alencar Castelo Branco", "São Francisco", "São José",
+        "São Mateus", "Vale do Sol", "Vinhosa"
+    ],
+    "Itatiaia": [
+        "Centro", "Jardim Itatiaia", "Vila Magnólia", "Vila Odete", "Maromba", "Maringá", "Penedo"
+    ],
+    "Japeri": [
+        "Alecrim", "Belo Horizonte", "Beira-Mar", "Centro", "Chacrinha", "Cidade Jardim",
+        "Engenheiro Pedreira", "Eucaliptos", "Guandu", "Jardim Delamare", "Jardim Primavera",
+        "Jardim Semeador", "Lagoa do Sapo", "Laranjal", "Marajoara", "Mucajá", "Nova Belém",
+        "Parque Mucajá", "Santa Amélia", "Santa Inês", "São Jorge", "Vila Central",
+        "Vila Conceição", "Virgem de Fátima"
+    ],
+    "Macaé": [
+        "Aeroporto", "Aroeira", "Barra de Macaé", "Botafogo", "Cajueiros", "Campo do Oeste",
+        "Cancela Preta", "Cavaleiros", "Centro", "Costa do Sol", "Engenho da Praia",
+        "Eixo Sul", "Glória", "Granja dos Cavaleiros", "Horto", "Imbetiba", "Imboassica",
+        "Jardim Guanabara", "Jardim Santo Antônio", "Jardim Vitória", "Lagoa", "Lagomar",
+        "Miramar", "Mirante da Lagoa", "Nova Brasília", "Nova Holanda", "Novo Cavaleiros",
+        "Parque Aeroporto", "Parque de Tubos", "Parque Valentina Miranda", "Pecado",
+        "Praia Campista", "Riviera Fluminense", "Santa Mônica", "Sol y Mar", "Vale Encantado",
+        "Virgem Santa", "Visconde de Araújo"
+    ],
+    "Macuco": [
+        "Centro", "Barreira", "Glória", "Reta"
+    ],
+    "Magé": [
+        "Centro (Magé)", "Flexeiras", "Barbuda", "Pico", "Vila Nova", "Saco",
+        "Centro (Vila Inhomirim)", "Fragoso", "Piabetá", "Suruí", "Guia de Pacobaíba",
+        "Mauá", "Pau Grande", "Rio do Ouro", "Santo Aleixo"
+    ],
+    "Mangaratiba": [
+        "Centro", "Conceição de Jacareí", "Ibicuí", "Itacuruçá", "Muriqui",
+        "Praia do Saco", "Serra do Piloto", "Vila de Muriqui"
+    ],
+    "Maricá": [
+        "Araçatiba", "Barra de Maricá", "Caju", "Caxito", "Centro", "Condado de Maricá",
+        "Flamengo", "Guaratiba", "Inoã", "Itaipuaçu", "Jacaroá", "Jaconé",
+        "Jardim Atlântico", "Mumbuca", "Parque Nanci", "Pindobas", "Ponta Grossa",
+        "Ponta Negra", "Recanto de Itaipuaçu", "São José do Imbassaí", "Spar",
+        "Ubatiba", "Zacarias"
+    ],
+    "Mendes": [
+        "Centro", "Independência", "Humberto Antunes", "Santa Rita", "Vila Mariana"
+    ],
+    "Mesquita": [
+        "Alto Uruguai", "Banco de Areia", "Centro", "Chatuba", "Coreia", "Cosmorama",
+        "Edson Passos", "Jacutinga", "Juscelino", "Rocha Sobrinho", "Santa Terezinha",
+        "Santo Elias", "Vila Emil"
+    ],
+    "Miguel Pereira": [
+        "Arcádia", "Barão de Javary", "Centro", "Conrado", "Governador Portela",
+        "Lagoa das Lontras", "Paes Leme", "Plante Café", "Ramada", "Vera Cruz", "Vila Suíça"
+    ],
+    "Miracema": [
+        "Centro", "Santa Terezinha", "Cehab", "Vila Nova", "Santa Cruz", "Rodolfo"
+    ],
+    "Natividade": [
+        "Centro", "Sindicato", "Liberdade", "Popular", "Balança"
+    ],
+    "Nilópolis": [
+        "Cabuís", "Centro", "Nova Cidade", "Manoel Reis", "Nossa Senhora de Fátima",
+        "Novo Horizonte", "Olinda", "Paiol de Pólvora", "Santos Dumont", "Tropical"
+    ],
+    "Niterói": [
+        "Badu", "Baldeador", "Barreto", "Boa Viagem", "Cachoeiras", "Cafubá",
+        "Camboinhas", "Cantagalo", "Caramujo", "Centro", "Charitas", "Cubango",
+        "Engenhoca", "Engenho do Mato", "Fátima", "Fonseca", "Gragoatá", "Icaraí",
+        "Ilha da Conceição", "Ingá", "Itaipu", "Ititioca", "Jacaré", "Jurujuba",
+        "Largo da Batalha", "Maceió", "Maria Paula", "Matapaca", "Morro do Estado",
+        "Muriqui", "Pé Pequeno", "Piratininga", "Ponta d'Areia", "Rio do Ouro",
+        "Santa Bárbara", "Santa Rosa", "Santana", "São Domingos", "São Francisco",
+        "São Lourenço", "Sapê", "Tenente Jardim", "Várzea das Moças", "Viçoso Jardim",
+        "Viradouro", "Vital Brazil"
+    ],
+    "Nova Friburgo": [
+        "Amparo", "Braunes", "Caledônia", "Cardinot", "Cascatinha", "Centro",
+        "Chácara do Paraíso", "Conselheiro Paulino", "Cônego", "Duas Pedras",
+        "Jardim Califórnia", "Jardim Ouro Preto", "Lagoinha", "Lumiar", "Mury",
+        "Olaria", "Paissandu", "Parque São Clemente", "Ponte da Saudade", "Prado",
+        "Riograndina", "São Geraldo", "São Pedro da Serra", "Suspiro", "Vale dos Pinheiros",
+        "Varginha", "Vila Guarani", "Vilage"
+    ],
+    "Nova Iguaçu": [
+        "Adrianópolis", "Austin", "Bairro da Luz", "Boa Esperança", "Califórnia",
+        "Caonze", "Centro", "Cobrex", "Comendador Soares", "Figueiras", "Jardim Alvorada",
+        "Jardim Guandu", "Jardim Iguaçu", "Jardim Nova Era", "Jardim Palmares",
+        "Jardim Tropical", "Kennedy", "Km 32", "Miguel Couto", "Moquetá", "Nova América",
+        "Palhada", "Parque Ambaí", "Posse", "Prata", "Rancho Novo", "Riachão",
+        "Santa Eugênia", "Tinguá", "Vila de Cava", "Vila Nova", "Vila Operária"
+    ],
+    "Paracambi": [
+        "Centro", "Cascata", "Fábrica", "Guarajuba", "Jardim Nova Era", "Lages",
+        "Parque Industrial", "Sabugo", "São José", "Vila São José"
+    ],
+    "Paraíba do Sul": [
+        "Centro", "Jatobá", "Liberdade", "Ponte", "Salutaris", "Vila Salutaris"
+    ],
+    "Paraty": [
+        "Barra Grande", "Caboclo", "Caborê", "Centro Histórico", "Chácara da Saudade",
+        "Corumbê", "Cunha", "Fátima", "Jabaquara", "Laranjeiras", "Mangueira",
+        "Paraty Mirim", "Patrimônio", "Ponte Branca", "Pontal", "Portão de Ferro",
+        "Praia Grande", "São Gonçalo", "Saudade", "Sertão do Taquari", "Trindade"
+    ],
+    "Paty do Alferes": [
+        "Centro", "Arcozelo", "Avelar", "Monte Alegre", "Palmares"
+    ],
+    "Petrópolis": [
+        "Alto da Serra", "Araras", "Bairro Castrioto", "Bingen", "Cascatinha",
+        "Castelânea", "Centro Histórico", "Chácara Flora", "Cidale", "Coronel Veiga",
+        "Corrêas", "Duarte da Silveira", "Duchas", "Fazenda Inglesa", "Floresta",
+        "Independência", "Itaipava", "Itamarati", "Jardim Americano", "Mosela",
+        "Nogueira", "Pedro do Rio", "Posse", "Quitandinha", "Retiro", "Samambaia",
+        "São Sebastião", "Secretário", "Siméria", "Valparaíso", "Vila Militar"
+    ],
+    "Pinheiral": [
+        "Centro", "Cruzeiro", "Parque Maíra", "Rolamão", "Varjão"
+    ],
+    "Piraí": [
+        "Centro", "Santanésia", "Arrozal", "Jaqueira", "Varjão"
+    ],
+    "Porciúncula": [
+        "Centro", "João Clóvis", "Ilha", "Operário", "Santo Antônio"
+    ],
+    "Porto Real": [
+        "Centro", "Freitas Soares", "Jardim das Acácias", "Nova Colônia", "Parque Mariana"
+    ],
+    "Quatis": [
+        "Centro", "Barrinha", "Jardim Independência", "Nossa Senhora do Rosário", "Pilotos"
+    ],
+    "Queimados": [
+        "Aliança", "Belmonte", "Centro", "Coimbra", "Fanchem", "Glória", "Inconfidência",
+        "Jardim da Fonte", "Jardim do Trevo", "Jardim São Miguel", "Nossa Senhora da Conceição",
+        "Paraíso", "Parque Ipanema", "Parque Valdariosa", "Ponte Preta", "São Francisco",
+        "São Roque", "Tri-Campeão", "Vila do Tinguá", "Vila Nascente", "Vila Pacaembu",
+        "Vila Americana", "Vila Guimarães"
+    ],
+    "Quissamã": [
+        "Centro", "Barra do Furado", "Canto da Saudade", "Machadinha", "Piteiras"
+    ],
+    "Resende": [
+        "Alto dos Passos", "Barbosa Lima", "Baixada da Olaria", "Cabral", "Campos Elíseos",
+        "Centro", "Cidade Alegria", "Engenheiro Passos", "Fazenda da Barra", "Ipiranga",
+        "Itapuca", "Jardim Aliança", "Jardim Beira Rio", "Jardim Brasília", "Jardim Jalisco",
+        "Liberdade", "Manejo", "Mirante das Agulhas", "Montese", "Morada da Colina",
+        "Morada do Contorno", "Morada da Barra", "Nova Liberdade", "Paraíso",
+        "Parque Ipiranga", "Parque Zito", "Penhasco", "Penedo", "Serrinha do Alambari",
+        "Surubi", "Toyota", "Vicentina", "Vila Julieta", "Vila Moderna", "Vila Santa Isabel"
+    ],
+    "Rio Bonito": [
+        "Centro", "Boqueirão", "Praça Cruzeiro", "Rio do Ouro", "Jacuba", "Mangueirinha"
+    ],
+    "Rio Claro": [
+        "Centro", "Lídice", "Passa Três", "Getulândia", "São João Marcos"
+    ],
+    "Rio das Flores": [
+        "Centro", "Abarracamento", "Cachoeira do Funil", "Manuel Duarte", "Taboas"
+    ],
+    "Rio das Ostras": [
+        "Alphaville", "Ancora", "Balneário Remanso", "Boca da Barra", "Centro",
+        "Chácara Mariléa", "Cidade Beira Mar", "Cidade Praiana", "Colinas", "Costazul",
+        "Enseada das Gaivotas", "Extensão do Bosque", "Floresta das Gaivotas",
+        "Jardim Bela Vista", "Jardim Campomar", "Jardim Mariléa", "Jardim Miramar",
+        "Liberdade", "Mar do Norte", "Nova Cidade", "Novo Rio das Ostras", "Operário",
+        "Palmital", "Parque da Cidade", "Parque Zabulão", "Praia Mar", "Recanto",
+        "Reduto da Paz", "Recreio", "Rocha Leão", "Santa Irene", "São Cristóvão",
+        "Terra Firme", "Verde Mar", "Village Rio das Ostras", "Zen"
+    ],
+        "Santa Maria Madalena": [
+        "Centro", "Arrastão", "Itapuá", "Parque Itaporanga", "Santo Antônio do Imbé"
+    ],
+    "Santo Antônio de Pádua": [
+        "Centro", "Cidade Nova", "Dezesseis", "Ferreira", "Gerador", "São Félix"
+    ],
+    "São Fidélis": [
+        "Centro", "Barão de Macaúbas", "Coroados", "Ipuca", "Montese", "Penha"
+    ],
+    "São Francisco de Itabapoana": [
+        "Centro", "Barra de Itabapoana", "Gargaú", "Guaxindiba", "Santa Clara", "Sonhos"
+    ],
+    "São Gonçalo": [
+        "Alcântara", "Antonina", "Boaçu", "Brasilândia", "Centro", "Colubandê", "Coelho",
+        "Cruzeiro do Sul", "Engenho do Roçado", "Engenho Pequeno", "Estrela do Norte",
+        "Fazenda dos Mineiros", "Galo Branco", "Gradim", "Guaxindiba", "Itaoca", "Itaúna",
+        "Jardim Amendoeira", "Jardim Catarina", "Jardim Imperial", "Jóquei", "Laranjal",
+        "Lindo Parque", "Luiz Caçador", "Maria Paula", "Mutondo", "Mutuá", "Neves",
+        "Nova Cidade", "Pacheco", "Paraíso", "Parada 40", "Patronato", "Pita",
+        "Porto da Madama", "Porto da Pedra", "Porto do Rosa", "Porto Novo", "Porto Velho",
+        "Raul Veiga", "Recanto das Acácias", "Rocha", "Rosane", "Salgueiro", "Santa Catarina",
+        "Santa Izabel", "Santa Luzia", "São Miguel", "Sete Pontes", "Tenente Jardim",
+        "Tribobó", "Trindade", "Vila Lage", "Vila Três", "Vista Alegre", "Zé Garoto"
+    ],
+    "São João da Barra": [
+        "Centro", "Atafona", "Grussaí", "Cajueiro", "Chapéu de Sol", "Barcelos"
+    ],
+    "São João de Meriti": [
+        "Agostinho Porto", "Centro", "Coelho da Rocha", "Éden", "Engenheiro Belford",
+        "Gato Preto", "Grande Rio", "Jardim Meriti", "Jardim Metrópole", "Jardim Sumaré",
+        "Parque Alian", "Parque Analândia", "Parque Araruama", "Parque Tietê", "São Mateus",
+        "Tomazinho", "Venda Velha", "Vila Norma", "Vila Rosali", "Vilar dos Teles"
+    ],
+    "São José de Ubá": [
+        "Centro", "Betel", "Divinéia", "João Valim"
+    ],
+    "São José do Vale do Rio Preto": [
+        "Centro", "Águas Claras", "Jaguara", "Parada Morelli", "Rio Bonito"
+    ],
+    "São Pedro da Aldeia": [
+        "Centro", "Balneário", "Baixo Grande", "Boqueirão", "Flexeira", "Nova São Pedro",
+        "Poço Fundo", "Praia Linda"
+    ],
+    "São Sebastião do Alto": [
+        "Centro", "Ipituna", "Valão do Barro", "Ibipeba"
+    ],
+    "Sapucaia": [
+        "Centro", "Aparecida", "Anta", "Jamapará", "Pião"
+    ],
+    "Saquarema": [
+        "Água Branca", "Bacaxá", "Barra Nova", "Boqueirão", "Centro", "Coqueiral",
+        "Gravatá", "Ipitangas", "Itaúna", "Jaconé", "Jardim", "Leigo", "Mombaça",
+        "Porto da Roça", "Retiro", "Sampaio Corrêa", "Vilatur"
+    ],
+    "Seropédica": [
+        "Boa Esperança", "Campo Lindo", "Centro", "Fazenda Caxias", "Incra",
+        "Jardim Maracanã", "Piranema", "Santa Sofia", "São Miguel"
+    ],
+    "Silva Jardim": [
+        "Centro", "Boqueirão", "Caxias", "Cidade Nova", "Imbaú"
+    ],
+    "Sumidouro": [
+        "Centro", "Campinas", "Dona Mariana", "Soledade", "Vila de Cima"
+    ],
+    "Tanguá": [
+        "Centro", "Ampliação", "Bandeirantes", "Duques", "Vila Cortes"
+    ],
+    "Teresópolis": [
+        "Agriões", "Albuquerque", "Alto", "Araras", "Barra do Imbuí", "Bom Retiro",
+        "Caxangá", "Comary", "Corta Vento", "Ermitage", "Fátima", "Fonte Santa",
+        "Granja Comary", "Granja Guarani", "Iúcas", "Jardim Cascata", "Jardim Meudon",
+        "Meudon", "Painera", "Paineiras", "Panorama", "Parque do Imbuí", "Parque São Luiz",
+        "Pimenteiras", "Posse", "Prata", "Quebra Frascos", "Quinta Lebrão", "Santa Cecília",
+        "São Pedro", "Soberbo", "Tijuca", "Várzea"
+    ],
+    "Trajano de Moraes": [
+        "Centro", "Visconde de Imbé", "Sodrelândia", "Ponte de Zinco"
+    ],
+    "Três Rios": [
+        "Bemposta", "Cantagalo", "Centro", "Cidade Nova", "Hermitage", "Jaqueline",
+        "Monte Castelo", "Nova Niterói", "Pilões", "Portão", "Purys", "Santa Teresinha",
+        "Triângulo", "Vila Isabel", "Werner Silveira"
+    ],
+    "Valença": [
+        "Alicácio", "Bairro de Fátima", "Belo Horizonte", "Benedito", "Centro",
+        "Chacrinha", "Conservatória", "Esteves", "Hildebrando Lopes", "Jardim Valença",
+        "João Bonito", "Osório", "Paraíso", "Parque Pentagna", "Santa Cruz",
+        "Santa Isabel do Rio Preto", "São Francisco", "Serra da Glória", "Spalla", "Varginha"
+    ],
+    "Vassouras": [
+        "Andrade Costa", "Centro", "Demétrio Ribeiro", "Ferroviários", "Guaíba", "Greco",
+        "Ipiranga", "Madruga", "Massambará", "Matadouro", "Mendes", "Residência",
+
+        "Rovisco Pais", "Santa Amália", "Sebastião Lacerda", "Vila dos Ferroviários"
+    ],
+    "Volta Redonda": [
+        "Açude", "Aero Clube", "Água Limpa", "Aterrado", "Bairro do Retiro", "Barreira Cravo",
+        "Belo Horizonte", "Belmonte", "Brasilândia", "Caieiras", "Candelária", "Casa de Pedra",
+        "Cinquentenário", "Coqueiros", "Conforto", "Dom Bosco", "Eucaliptal", "Jardim Amália",
+        "Jardim Belvedere", "Jardim Normândia", "Jardim Paraíba", "Jardim Ponte Alta",
+        "Laranjal", "Limoeiro", "Monte Castelo", "Morada da Colina", "Niterói",
+        "Nova Primavera", "Nova São Luiz", "Padre Josimo", "Ponte Alta", "Retiro", "Roma",
+        "Sampaio", "Santa Cruz", "Santa Inês", "Santa Rita do Zarur", "Santo Agostinho",
+        "São Cristóvão", "São Geraldo", "São João Batista", "São Lucas", "Sessenta",
+        "Siderlândia", "Siderópolis", "Três Poços", "Vila Americana", "Vila Brasília",
+        "Vila Mury", "Vila Rica", "Vila Santa Cecília", "Voldac"
+    ]
+
+}
+
 TIPOS_IMOVEL = [
     "Apartamento", 
     "Casa", 
@@ -86,7 +534,7 @@ TIPOS_IMOVEL = [
 MODALIDADES = ["Aluguel", "Venda"]
 
 # --- Estados da conversa ---
-(ESCOLHA_LOCAL, ESCOLHA_ZONA, ESCOLHA_BAIRRO, ESCOLHA_CIDADE, ESCOLHA_ZONA_COMPLETA, ESCOLHA_TIPO, ESCOLHA_MODALIDADE, ESCOLHA_REFINAMENTO, ESCOLHA_PAGINAS, CONFIRMA_BUSCA, AGUARDA_SCRAPING) = range(11)
+(ESCOLHA_LOCAL, ESCOLHA_ZONA, ESCOLHA_BAIRRO, ESCOLHA_CIDADE, ESCOLHA_ZONA_COMPLETA, ESCOLHA_CIDADE_INTERIOR, ESCOLHA_BAIRRO_INTERIOR, ESCOLHA_TIPO, ESCOLHA_MODALIDADE, ESCOLHA_REFINAMENTO, ESCOLHA_PAGINAS, CONFIRMA_BUSCA, AGUARDA_SCRAPING) = range(13)
 
 # --- Função utilitária para GPT-4o mini ---
 def gpt4o_ask(prompt, system=None):
@@ -103,7 +551,8 @@ def gpt4o_ask(prompt, system=None):
             max_tokens=300,
             temperature=0.2,
         )
-        result = response.choices[0].message.content.strip()
+        content = response.choices[0].message.content
+        result = content.strip() if content else ""
         logger.info(f"🤖 OpenAI Response: {result[:100]}...")
         return result
     except Exception as e:
@@ -177,6 +626,11 @@ def build_vivareal_url(context):
         # Cidade do interior: /venda/rj/marica/casa_residencial/
         cidade_norm = normalize_str(cidade)
         url = f"{base_url}/{trans_slug}/rj/{cidade_norm}/{tipo_slug}/"
+    elif local == 'bairro_interior':
+        # Bairro de cidade do interior: /venda/rj/angra-dos-reis/bairros/centro/casa_residencial/
+        cidade_norm = normalize_str(cidade)
+        bairro_norm = normalize_str(bairro)
+        url = f"{base_url}/{trans_slug}/rj/{cidade_norm}/bairros/{bairro_norm}/{tipo_slug}/"
     elif local == 'zona':
         # Zona completa: /venda/rj/rio-de-janeiro/zona-sul/
         zona_slug = zona_slug_map.get(zona, normalize_str(zona))
@@ -895,7 +1349,7 @@ async def cancel_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message:
         return ConversationHandler.END
         
-    user_id = update.effective_user.id
+    user_id = update.effective_user.id if update.effective_user else 0
     logger.info(f"🚫 User {user_id} requested cancellation with /x")
     
     # Cancela scraping se estiver ativo
@@ -917,7 +1371,7 @@ async def restart_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message:
         return ConversationHandler.END
         
-    user_id = update.effective_user.id
+    user_id = update.effective_user.id if update.effective_user else 0
     logger.info(f"🔄 User {user_id} requested restart with /r")
     
     # Cancela scraping se estiver ativo
@@ -940,7 +1394,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message:
         return ConversationHandler.END
         
-    user_id = update.effective_user.id
+    user_id = update.effective_user.id if update.effective_user else 0
     logger.info(f"👋 User {user_id} started the bot")
     
     # Limpar dados anteriores
@@ -955,8 +1409,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "1️⃣ Todo o estado do RJ - Busca em todo o Rio de Janeiro\n"
         "2️⃣ Bairros do Rio - Centro, Sul, Norte, Oeste \n"
         "3️⃣ Cidades do interior - Outras cidades do RJ\n"
-        "4️⃣ Zonas do RJ Completas - Zonas inteiras sem bairros específicos\n\n"
-        "Responda apenas o número da opção (1, 2, 3 ou 4)."
+        "4️⃣ Zonas do RJ Completas - Zonas inteiras sem bairros específicos\n"
+        "5️⃣ Bairros de Cidades do Interior - RJ\n\n"
+        "Responda apenas o número da opção (1, 2, 3, 4 ou 5)."
     )
     await update.message.reply_text(welcome_message)
     logger.info(f"📤 Sent to user {user_id}: {welcome_message[:100]}...")
@@ -966,17 +1421,19 @@ async def escolha_local(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message or not isinstance(update.message.text, str) or not update.message.text:
         return ConversationHandler.END
     
-    user_id = update.effective_user.id
+    user_id = update.effective_user.id if update.effective_user else 0
     user_choice = update.message.text.strip()
     logger.info(f"👤 User {user_id} chose: {user_choice}")
     
     txt = update.message.text.strip()
     if txt == '1':
-        context.user_data['local'] = 'todo_estado'
+        if context.user_data is not None:
+            context.user_data['local'] = 'todo_estado'
         logger.info(f"📍 User {user_id} selected: Todo o estado do RJ")
         return await pergunta_tipo(update, context)
     elif txt == '2':
-        context.user_data['local'] = 'zona'
+        if context.user_data is not None:
+            context.user_data['local'] = 'zona'
         zonas = list(ZONAS_RJ.keys())
         zonas_str = '\n'.join(f"{i+1}. {z}" for i, z in enumerate(zonas))
         pergunta = gpt4o_ask(
@@ -984,10 +1441,12 @@ async def escolha_local(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         await update.message.reply_text(pergunta)
         logger.info(f"📤 Sent to user {user_id}: {pergunta[:100]}...")
-        context.user_data['zonas'] = zonas
+        if context.user_data is not None:
+            context.user_data['zonas'] = zonas
         return ESCOLHA_ZONA
     elif txt == '3':
-        context.user_data['local'] = 'cidade'
+        if context.user_data is not None:
+            context.user_data['local'] = 'cidade'
         
         # Dividir a lista de cidades em duas partes para não sobrecarregar a mensagem
         total_cidades = len(CIDADES_RJ)
@@ -1017,7 +1476,8 @@ async def escolha_local(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         
         logger.info(f"📤 Sent complete city list to user {user_id}")
-        context.user_data['cidades'] = CIDADES_RJ  # Salvar lista completa
+        if context.user_data is not None:
+            context.user_data['cidades'] = CIDADES_RJ  # Salvar lista completa
         return ESCOLHA_CIDADE
     elif txt == '4':
         context.user_data['local'] = 'zona_completa'
@@ -1032,8 +1492,44 @@ async def escolha_local(update: Update, context: ContextTypes.DEFAULT_TYPE):
         logger.info(f"📤 Sent complete zone options to user {user_id}")
         context.user_data['zonas_completas'] = zonas_completas
         return ESCOLHA_ZONA_COMPLETA
+    elif txt == '5':
+        if context.user_data is not None:
+            context.user_data['local'] = 'cidade_interior'
+        
+        # Listar cidades do interior que têm bairros definidos
+        cidades_interior = list(CIDADES_INTERIOR_BAIRROS.keys())
+        total_cidades = len(cidades_interior)
+        metade = total_cidades // 2
+        
+        # Primeira metade
+        cidades_parte1 = cidades_interior[:metade]
+        cidades_str1 = '\n'.join(f"{i+1}. {c}" for i, c in enumerate(cidades_parte1))
+        
+        # Segunda metade
+        cidades_parte2 = cidades_interior[metade:]
+        cidades_str2 = '\n'.join(f"{i+metade+1}. {c}" for i, c in enumerate(cidades_parte2))
+        
+        # Enviar primeira mensagem
+        await update.message.reply_text(
+            f"🏙️ Qual cidade do interior do RJ você deseja buscar bairros?\n\n"
+            f"**PARTE 1 ({total_cidades} cidades com bairros disponíveis):**\n\n"
+            f"{cidades_str1}\n\n"
+            f"*Continua na próxima mensagem...*"
+        )
+        
+        # Enviar segunda mensagem
+        await update.message.reply_text(
+            f"**PARTE 2:**\n\n"
+            f"{cidades_str2}\n\n"
+            f"*Responda apenas o número da cidade desejada.*"
+        )
+        
+        logger.info(f"📤 Sent interior cities list to user {user_id}")
+        if context.user_data is not None:
+            context.user_data['cidades_interior'] = cidades_interior
+        return ESCOLHA_CIDADE_INTERIOR
     else:
-        await update.message.reply_text("Por favor, responda 1, 2, 3 ou 4.")
+        await update.message.reply_text("Por favor, responda 1, 2, 3, 4 ou 5.")
         logger.info(f"❌ User {user_id} gave invalid choice: {txt}")
         return ESCOLHA_LOCAL
 
@@ -1185,6 +1681,186 @@ async def escolha_zona_completa(update: Update, context: ContextTypes.DEFAULT_TY
         await update.message.reply_text("Escolha inválida. Responda o número da zona desejada.")
         logger.info(f"❌ User {user_id} gave invalid zone choice: {user_choice}")
         return ESCOLHA_ZONA_COMPLETA
+
+async def escolha_cidade_interior(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not update.message or not isinstance(update.message.text, str) or not update.message.text:
+        return ConversationHandler.END
+    if not isinstance(context.user_data, dict):
+        return ConversationHandler.END
+    
+    user_id = update.effective_user.id
+    user_choice = update.message.text.strip()
+    logger.info(f"👤 User {user_id} chose interior city: {user_choice}")
+    
+    try:
+        # Tentar interpretar como número
+        cidades_interior = context.user_data.get('cidades_interior', [])
+        if not isinstance(cidades_interior, list):
+            return ConversationHandler.END
+        
+        # Debug: verificar se a lista está vazia
+        if len(cidades_interior) == 0:
+            await update.message.reply_text(
+                "❌ Lista de cidades não disponível. Use /restart para tentar novamente."
+            )
+            logger.error(f"❌ Empty interior cities list for user {user_id}")
+            return ConversationHandler.END
+        
+        idx = int(user_choice) - 1
+        if idx < 0 or idx >= len(cidades_interior):
+            raise ValueError("Índice fora do range")
+        
+        cidade_interior = cidades_interior[idx]
+        context.user_data['cidade_interior'] = cidade_interior
+        logger.info(f"📍 User {user_id} selected interior city: {cidade_interior}")
+        
+        # Buscar bairros da cidade selecionada
+        bairros_cidade = CIDADES_INTERIOR_BAIRROS.get(cidade_interior, [])
+        if not bairros_cidade:
+            await update.message.reply_text(
+                f"❌ Nenhum bairro encontrado para {cidade_interior}. Use /restart para tentar novamente."
+            )
+            logger.error(f"❌ No neighborhoods found for city {cidade_interior}")
+            return ConversationHandler.END
+        
+        # Dividir lista de bairros se muito longa
+        if len(bairros_cidade) > 20:
+            metade = len(bairros_cidade) // 2
+            bairros_parte1 = bairros_cidade[:metade]
+            bairros_parte2 = bairros_cidade[metade:]
+            
+            bairros_str1 = '\n'.join(f"{i+1}. {b}" for i, b in enumerate(bairros_parte1))
+            bairros_str2 = '\n'.join(f"{i+metade+1}. {b}" for i, b in enumerate(bairros_parte2))
+            
+            await update.message.reply_text(
+                f"🏘️ Bairros de **{cidade_interior}** - PARTE 1:\n\n{bairros_str1}\n\n*Continua na próxima mensagem...*"
+            )
+            await update.message.reply_text(
+                f"🏘️ Bairros de **{cidade_interior}** - PARTE 2:\n\n{bairros_str2}\n\n*Responda o número do bairro desejado.*"
+            )
+        else:
+            bairros_str = '\n'.join(f"{i+1}. {b}" for i, b in enumerate(bairros_cidade))
+            await update.message.reply_text(
+                f"🏘️ Bairros de **{cidade_interior}**:\n\n{bairros_str}\n\n*Responda o número do bairro desejado.*"
+            )
+        
+        logger.info(f"📤 Sent neighborhoods list for {cidade_interior} to user {user_id}")
+        context.user_data['bairros_cidade_interior'] = bairros_cidade
+        return ESCOLHA_BAIRRO_INTERIOR
+        
+    except ValueError:
+        # Se não conseguiu interpretar como número, tentar como nome exato
+        cidade_interior = user_choice
+        if cidade_interior not in CIDADES_INTERIOR_BAIRROS:
+            total_cidades = len(cidades_interior)
+            await update.message.reply_text(
+                f"❌ Opção inválida. Por favor, responda com o **número** da cidade desejada "
+                f"(entre 1 e {total_cidades}), conforme mostrado na lista acima.\n\n"
+                f"Ou digite o nome exato da cidade."
+            )
+            logger.info(f"❌ User {user_id} gave invalid interior city choice: {user_choice}")
+            return ESCOLHA_CIDADE_INTERIOR
+        
+        # Se encontrou por nome exato
+        context.user_data['cidade_interior'] = cidade_interior
+        logger.info(f"📍 User {user_id} selected interior city by name: {cidade_interior}")
+        
+        # Buscar bairros da cidade selecionada
+        bairros_cidade = CIDADES_INTERIOR_BAIRROS.get(cidade_interior, [])
+        if not bairros_cidade:
+            await update.message.reply_text(
+                f"❌ Nenhum bairro encontrado para {cidade_interior}. Use /restart para tentar novamente."
+            )
+            logger.error(f"❌ No neighborhoods found for city {cidade_interior}")
+            return ConversationHandler.END
+        
+        # Dividir lista de bairros se muito longa
+        if len(bairros_cidade) > 20:
+            metade = len(bairros_cidade) // 2
+            bairros_parte1 = bairros_cidade[:metade]
+            bairros_parte2 = bairros_cidade[metade:]
+            
+            bairros_str1 = '\n'.join(f"{i+1}. {b}" for i, b in enumerate(bairros_parte1))
+            bairros_str2 = '\n'.join(f"{i+metade+1}. {b}" for i, b in enumerate(bairros_parte2))
+            
+            await update.message.reply_text(
+                f"🏘️ Bairros de **{cidade_interior}** - PARTE 1:\n\n{bairros_str1}\n\n*Continua na próxima mensagem...*"
+            )
+            await update.message.reply_text(
+                f"🏘️ Bairros de **{cidade_interior}** - PARTE 2:\n\n{bairros_str2}\n\n*Responda o número do bairro desejado.*"
+            )
+        else:
+            bairros_str = '\n'.join(f"{i+1}. {b}" for i, b in enumerate(bairros_cidade))
+            await update.message.reply_text(
+                f"🏘️ Bairros de **{cidade_interior}**:\n\n{bairros_str}\n\n*Responda o número do bairro desejado.*"
+            )
+        
+        logger.info(f"📤 Sent neighborhoods list for {cidade_interior} to user {user_id}")
+        context.user_data['bairros_cidade_interior'] = bairros_cidade
+        return ESCOLHA_BAIRRO_INTERIOR
+
+async def escolha_bairro_interior(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not update.message or not isinstance(update.message.text, str) or not update.message.text:
+        return ConversationHandler.END
+    if not isinstance(context.user_data, dict):
+        return ConversationHandler.END
+    
+    user_id = update.effective_user.id
+    user_choice = update.message.text.strip()
+    logger.info(f"👤 User {user_id} chose interior neighborhood: {user_choice}")
+    
+    try:
+        # Tentar interpretar como número
+        bairros_cidade = context.user_data.get('bairros_cidade_interior', [])
+        if not isinstance(bairros_cidade, list):
+            return ConversationHandler.END
+        
+        # Debug: verificar se a lista está vazia
+        if len(bairros_cidade) == 0:
+            await update.message.reply_text(
+                "❌ Lista de bairros não disponível. Use /restart para tentar novamente."
+            )
+            logger.error(f"❌ Empty neighborhoods list for user {user_id}")
+            return ConversationHandler.END
+        
+        idx = int(user_choice) - 1
+        if idx < 0 or idx >= len(bairros_cidade):
+            raise ValueError("Índice fora do range")
+        
+        bairro_interior = bairros_cidade[idx]
+        context.user_data['bairro_interior'] = bairro_interior
+        context.user_data['local'] = 'bairro_interior'
+        context.user_data['cidade'] = context.user_data.get('cidade_interior')
+        context.user_data['bairro'] = bairro_interior
+        logger.info(f"📍 User {user_id} selected interior neighborhood: {bairro_interior}")
+        
+        cidade_interior = context.user_data.get('cidade_interior', 'N/A')
+        await update.message.reply_text(f"✅ Selecionado: **{bairro_interior}**, {cidade_interior}")
+        return await pergunta_tipo(update, context)
+        
+    except ValueError:
+        # Se não conseguiu interpretar como número, tentar como nome exato
+        bairro_interior = user_choice
+        if bairro_interior not in bairros_cidade:
+            total_bairros = len(bairros_cidade)
+            await update.message.reply_text(
+                f"❌ Opção inválida. Por favor, responda com o **número** do bairro desejado "
+                f"(entre 1 e {total_bairros}), conforme mostrado na lista acima.\n\n"
+                f"Ou digite o nome exato do bairro."
+            )
+            logger.info(f"❌ User {user_id} gave invalid interior neighborhood choice: {user_choice}")
+            return ESCOLHA_BAIRRO_INTERIOR
+        
+        # Se encontrou por nome exato
+        context.user_data['bairro_interior'] = bairro_interior
+        context.user_data['local'] = 'bairro_interior'
+        context.user_data['cidade'] = context.user_data.get('cidade_interior')
+        context.user_data['bairro'] = bairro_interior
+        logger.info(f"📍 User {user_id} selected interior neighborhood by name: {bairro_interior}")
+        
+        cidade_interior = context.user_data.get('cidade_interior', 'N/A')
+        await update.message.reply_text(f"✅ Selecionado: **{bairro_interior}**, {cidade_interior}")
+        return await pergunta_tipo(update, context)
 
 async def pergunta_tipo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message or not isinstance(update.message.text, str):
@@ -1563,6 +2239,10 @@ def run_scraping_and_send(update, context, loop):
                 bairro = user_data.get('bairro', 'N/A')
                 zona = user_data.get('zona', 'N/A')
                 return f"Bairro {bairro}, {zona}"
+            elif local == 'bairro_interior':
+                bairro = user_data.get('bairro', 'N/A')
+                cidade = user_data.get('cidade', 'N/A')
+                return f"Bairro {bairro}, {cidade}"
             elif local == 'cidade':
                 cidade = user_data.get('cidade', 'N/A')
                 return f"Cidade {cidade}"
@@ -1695,6 +2375,8 @@ def main():
             ESCOLHA_BAIRRO: [MessageHandler(filters.TEXT & ~filters.COMMAND, escolha_bairro)],
             ESCOLHA_CIDADE: [MessageHandler(filters.TEXT & ~filters.COMMAND, escolha_cidade)],
             ESCOLHA_ZONA_COMPLETA: [MessageHandler(filters.TEXT & ~filters.COMMAND, escolha_zona_completa)],
+            ESCOLHA_CIDADE_INTERIOR: [MessageHandler(filters.TEXT & ~filters.COMMAND, escolha_cidade_interior)],
+            ESCOLHA_BAIRRO_INTERIOR: [MessageHandler(filters.TEXT & ~filters.COMMAND, escolha_bairro_interior)],
             ESCOLHA_TIPO: [MessageHandler(filters.TEXT & ~filters.COMMAND, escolha_tipo)],
             ESCOLHA_MODALIDADE: [MessageHandler(filters.TEXT & ~filters.COMMAND, escolha_modalidade)],
             ESCOLHA_REFINAMENTO: [MessageHandler(filters.TEXT & ~filters.COMMAND, escolha_refinamento)],
